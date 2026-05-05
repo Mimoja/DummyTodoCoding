@@ -94,15 +94,20 @@ def list_todos():
             end="",
         )
 
-        if todo.context:
-            print("  ", todo.context, color="magenta")
+        print("  ", todo.context or "", color="magenta")
 
 
 def add_todo(desc: str, context: str | None):
     global todos
-    next_id = max([todo.id for todo in todos] or [0]) + 1
+    if not context:
+        descriptions = [d.strip() for d in desc.split(",")]
+    else:
+        descriptions = [desc]
 
-    todos.append(Todo(next_id, desc, context, None))
+    for description in descriptions:
+        next_id = max([todo.id for todo in todos] or [0]) + 1
+        todos.append(Todo(next_id, description, context, None))
+
     writeTodos()
 
 
